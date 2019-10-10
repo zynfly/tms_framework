@@ -20,7 +20,7 @@ In order to start a new installation of the Themosis framework, you need to have
 Once you have Composer setup, run the following command in your Terminal or Console in order to install a fresh copy of the Themosis framework:
 
 ```bash
-composer create-project themosis/themosis myproject
+composer create-project zynfly/themosis myproject
 ```
 
 The above command will install a new instance of the Themosis framework under the `myproject` directory.

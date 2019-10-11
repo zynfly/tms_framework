@@ -6,6 +6,7 @@ use Composer\Autoload\ClassLoader;
 use Illuminate\Config\Repository;
 use Themosis\Asset\Finder;
 use Themosis\Core\Support\IncludesFiles;
+use Themosis\Core\Support\WordPressAddons;
 use Themosis\Core\Support\WordPressFileHeaders;
 use Themosis\Core\Theme\ImageSize;
 use Themosis\Core\Theme\Support;
@@ -13,7 +14,7 @@ use Themosis\Core\Theme\Templates;
 
 class ThemeManager
 {
-    use WordPressFileHeaders, IncludesFiles;
+    use WordPressFileHeaders, IncludesFiles, WordPressAddons;
 
     /**
      * @var Application
@@ -114,7 +115,7 @@ class ThemeManager
     {
         $finder = $this->app->bound('asset.finder') ? $this->app['asset.finder'] : null;
 
-        if (! is_null($finder)) {
+        if (!is_null($finder)) {
             /** @var Finder $finder */
             $finder->addLocations($locations);
         }
@@ -153,7 +154,7 @@ class ThemeManager
      */
     public function getPath(string $path = '')
     {
-        return $this->dirPath.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->dirPath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -167,14 +168,14 @@ class ThemeManager
     {
         if (is_multisite() && defined(SUBDOMAIN_INSTALL) && SUBDOMAIN_INSTALL) {
             return sprintf(
-                '%s/%s/themes/%s',
-                get_home_url(),
-                CONTENT_DIR,
-                $this->getDirectory()
-            ).($path ? '/'.$path : $path);
+                    '%s/%s/themes/%s',
+                    get_home_url(),
+                    CONTENT_DIR,
+                    $this->getDirectory()
+                ) . ($path ? '/' . $path : $path);
         }
 
-        return get_template_directory_uri().($path ? '/'.$path : $path);
+        return get_template_directory_uri() . ($path ? '/' . $path : $path);
     }
 
     /**
@@ -203,7 +204,7 @@ class ThemeManager
     protected function setThemeAutoloading()
     {
         foreach ($this->config->get('theme.autoloading', []) as $ns => $path) {
-            $path = $this->dirPath.'/'.trim($path, '\/');
+            $path = $this->dirPath . '/' . trim($path, '\/');
             $this->loader->addPsr4($ns, $path);
         }
 
@@ -211,33 +212,17 @@ class ThemeManager
     }
 
     /**
-     * Register theme services providers.
-     *
-     * @param array $providers
-     *
-     * @return $this
-     */
-    public function providers(array $providers = [])
-    {
-        foreach ($providers as $provider) {
-            $this->app->register(new $provider($this->app));
-        }
-
-        return $this;
-    }
-
-    /**
      * Register theme views path.
      *
      * @param array $paths
      *
+     * @return $this
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      *
-     * @return $this
      */
     public function views(array $paths = [])
     {
-        if (! $this->app->has('view')) {
+        if (!$this->app->has('view')) {
             return $this;
         }
 
@@ -259,7 +244,7 @@ class ThemeManager
                 $location = $path;
             }
 
-            $uri = $this->dirPath.'/'.trim($location, '\/');
+            $uri = $this->dirPath . '/' . trim($location, '\/');
             $factory->getFinder()->addOrderedLocation($uri, $priority);
             $twigLoader->addPath($uri);
         }
@@ -272,10 +257,10 @@ class ThemeManager
      */
     protected function setThemeConstants()
     {
-        $this->parsedHeaders = $this->headers($this->dirPath.'/style.css', $this->headers);
+        $this->parsedHeaders = $this->headers($this->dirPath . '/style.css', $this->headers);
 
         // Theme text domain.
-        $textdomain = (isset($this->parsedHeaders['text_domain']) && ! empty($this->parsedHeaders['text_domain']))
+        $textdomain = (isset($this->parsedHeaders['text_domain']) && !empty($this->parsedHeaders['text_domain']))
             ? $this->parsedHeaders['text_domain']
             : 'themosis_theme';
 
@@ -305,7 +290,7 @@ class ThemeManager
      * Return a configuration value.
      *
      * @param string $key
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */

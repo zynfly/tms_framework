@@ -7,11 +7,12 @@ use Illuminate\Config\Repository;
 use Themosis\Asset\Finder;
 use Themosis\Core\Support\IncludesFiles;
 use Themosis\Core\Support\PluginHeaders;
+use Themosis\Core\Support\WordPressAddons;
 use Themosis\Core\Support\WordPressFileHeaders;
 
 class PluginManager
 {
-    use WordPressFileHeaders, IncludesFiles, PluginHeaders;
+    use WordPressFileHeaders, IncludesFiles, PluginHeaders, WordPressAddons;
 
     /**
      * @var Application
@@ -110,7 +111,7 @@ class PluginManager
      */
     public function getPath(string $path = ''): string
     {
-        return $this->dirPath.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->dirPath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -150,14 +151,14 @@ class PluginManager
     /**
      * Return a plugin configuration value.
      *
-     * @param string $key     Key configuration short name.
-     * @param mixed  $default
+     * @param string $key Key configuration short name.
+     * @param mixed $default
      *
      * @return mixed
      */
     public function config(string $key, $default = null)
     {
-        $fullnameKey = $this->getNamespace().'_'.$key;
+        $fullnameKey = $this->getNamespace() . '_' . $key;
 
         return $this->config->get($fullnameKey, $default);
     }
@@ -173,7 +174,7 @@ class PluginManager
     {
         $finder = $this->app->bound('asset.finder') ? $this->app['asset.finder'] : null;
 
-        if (! is_null($finder)) {
+        if (!is_null($finder)) {
             /** @var Finder $finder */
             $finder->addLocations($locations);
         }
@@ -192,7 +193,7 @@ class PluginManager
         $domainVar = strtoupper($domainVar);
         $textDomain = $this->parsedHeaders['text_domain'] ?? 'plugin-textdomain';
 
-        if (! defined($domainVar)) {
+        if (!defined($domainVar)) {
             define($domainVar, $textDomain);
         }
     }
@@ -214,7 +215,7 @@ class PluginManager
      */
     protected function loadPluginConfiguration(string $configPath)
     {
-        $this->app->loadConfigurationFiles($this->config, $this->dirPath.'/'.trim($configPath, '\/'));
+        $this->app->loadConfigurationFiles($this->config, $this->dirPath . '/' . trim($configPath, '\/'));
     }
 
     /**
@@ -223,27 +224,11 @@ class PluginManager
     protected function setPluginAutoloading()
     {
         foreach ($this->config('plugin.autoloading', []) as $ns => $path) {
-            $path = $this->dirPath.'/'.trim($path, '\/');
+            $path = $this->dirPath . '/' . trim($path, '\/');
             $this->loader->addPsr4($ns, $path);
         }
 
         $this->loader->register();
-    }
-
-    /**
-     * Register plugin services providers.
-     *
-     * @param array $providers
-     *
-     * @return $this
-     */
-    public function providers(array $providers = [])
-    {
-        foreach ($providers as $provider) {
-            $this->app->register(new $provider($this->app));
-        }
-
-        return $this;
     }
 
     /**
@@ -255,7 +240,7 @@ class PluginManager
      */
     public function views(array $paths = [])
     {
-        if (! $this->app->has('view')) {
+        if (!$this->app->has('view')) {
             return $this;
         }
 
@@ -267,7 +252,7 @@ class PluginManager
         $twigLoader = $this->app->make('twig.loader');
 
         foreach ($paths as $path) {
-            $uri = $this->dirPath.'/'.trim($path, '\/');
+            $uri = $this->dirPath . '/' . trim($path, '\/');
             $factory->addLocation($uri);
             $twigLoader->addPath($uri);
         }

@@ -3,11 +3,9 @@
 namespace Themosis\Core\Support;
 
 use Themosis\Core\HooksRepository;
-use Themosis\Core\PluginManager;
 
 trait WordPressAddons
 {
-
     /**
      * Register Addons services providers.
      *
@@ -20,10 +18,15 @@ trait WordPressAddons
         foreach ($providers as $provider) {
             $this->app->register(new $provider($this->app));
         }
-        HooksRepository
+
         return $this;
     }
 
+    /**
+     * Register Addons hooks
+     *
+     * @param array $hooks
+     */
     public function hooks(array $hooks = [])
     {
         (new HooksRepository($this->app))->load($hooks);

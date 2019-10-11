@@ -344,7 +344,7 @@ class PluginInstallCommand extends Command
     {
         return [
             ['dir', null, InputOption::VALUE_OPTIONAL, 'ZIP file base directory name.', 'plugin-master'],
-            ['url', null, InputOption::VALUE_OPTIONAL, 'Plugin ZIP file URL.', 'https://github.com/themosis/plugin/archive/master.zip'],
+            ['url', null, InputOption::VALUE_OPTIONAL, 'Plugin ZIP file URL.', 'https://github.com/zynfly/tms_plugin/archive/master.zip'],
             ['mu', null, InputOption::VALUE_NONE, 'Install as mu-plugin.']
         ];
     }

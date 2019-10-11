@@ -168,7 +168,7 @@ STYLES;
     {
         return [
             ['dir', null, InputOption::VALUE_OPTIONAL, 'ZIP file base directory name.', 'theme-master'],
-            ['url', null, InputOption::VALUE_OPTIONAL, 'Theme ZIP file URL.', 'https://github.com/themosis/theme/archive/master.zip'],
+            ['url', null, InputOption::VALUE_OPTIONAL, 'Theme ZIP file URL.', 'https://github.com/zynfly/tms_theme/archive/master.zip'],
             ['default', null, InputOption::VALUE_OPTIONAL, 'Set default theme constant.', true]
         ];
     }

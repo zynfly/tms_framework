@@ -11,7 +11,7 @@ use App\Http\Kernel;
 use Themosis\Core\Application;
 use Themosis\Support\Facades\Filter;
 
-class WpTheme extends Hookable
+class WordPressThemeSupport extends Hookable
 {
 
     /**
@@ -51,7 +51,7 @@ class WpTheme extends Hookable
         $this->response = $this->kernel->handle($this->request);
 
 
-        if (404 != $this->response->getStatusCode() && 'is_404' != $this->request->route()->getCondition()) {
+        if (404 != $this->response->getStatusCode() && !empty($this->request->route()) && 'is_404' != $this->request->route()->getCondition()) {
             $this->response_send();
         }
     }

@@ -166,16 +166,22 @@ class ThemeManager
      */
     public function getUrl(string $path = '')
     {
-        if (is_multisite() && defined(SUBDOMAIN_INSTALL) && SUBDOMAIN_INSTALL) {
-            return sprintf(
-                    '%s/%s/themes/%s',
-                    get_home_url(),
-                    CONTENT_DIR,
-                    $this->getDirectory()
-                ) . ($path ? '/' . $path : $path);
-        }
-
-        return get_template_directory_uri() . ($path ? '/' . $path : $path);
+        return sprintf(
+                '%s/%s/themes/%s',
+                get_home_url(),
+                CONTENT_DIR,
+                $this->getDirectory()
+            ) . ($path ? '/' . $path : $path);
+//        if (is_multisite() && defined(SUBDOMAIN_INSTALL) && SUBDOMAIN_INSTALL) {
+//            return sprintf(
+//                    '%s/%s/themes/%s',
+//                    get_home_url(),
+//                    CONTENT_DIR,
+//                    $this->getDirectory()
+//                ) . ($path ? '/' . $path : $path);
+//        }
+//
+//        return get_template_directory_uri() . ($path ? '/' . $path : $path);
     }
 
     /**

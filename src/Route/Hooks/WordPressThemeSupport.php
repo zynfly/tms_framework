@@ -2,28 +2,27 @@
 
 namespace Themosis\Route\Hooks;
 
+use App\Http\Kernel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Themosis\Core\Application;
 use Themosis\Hook\Hookable;
 use Themosis\Support\Facades\Action;
-use App\Http\Kernel;
-use Themosis\Core\Application;
 use Themosis\Support\Facades\Filter;
 
 class WordPressThemeSupport extends Hookable
 {
-
     /**
-     * @var $request Request
+     * @var Request
      */
     protected $request;
     /**
-     * @var $response Response
+     * @var Response
      */
     protected $response;
     /**
-     * @var $kernel Kernel
+     * @var Kernel
      */
     protected $kernel;
 
@@ -41,8 +40,7 @@ class WordPressThemeSupport extends Hookable
         exit;
     }
 
-    public
-    function template_redirect()
+    public function template_redirect()
     {
         $app = Application::getInstance();
         $this->kernel = $app->make(Kernel::class);
@@ -51,17 +49,18 @@ class WordPressThemeSupport extends Hookable
         $this->response = $this->kernel->handle($this->request);
 
 
-        if (404 != $this->response->getStatusCode() && !empty($this->request->route()) && 'is_404' != $this->request->route()->getCondition()) {
+        if (404 != $this->response->getStatusCode() && ! empty($this->request->route()) && 'is_404' != $this->request->route()->getCondition()) {
             $this->response_send();
         }
     }
 
     public function template_include($template)
     {
-        if (Str::endsWith($template, '404.php') && !empty($this->request->route())) {
+        if (Str::endsWith($template, '404.php') && ! empty($this->request->route())) {
             $this->response_send();
         }
         error_reporting(0);
+
         return $template;
     }
 }

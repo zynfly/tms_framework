@@ -36,7 +36,7 @@ class WordPressThemeSupport extends Hookable
     protected function response_send()
     {
         $this->response->send();
-        $this->kernel->terminate($request, $this->response);
+        $this->kernel->terminate($this->request, $this->response);
         exit;
     }
 
